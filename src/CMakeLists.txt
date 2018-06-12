@@ -1,4 +1,5 @@
 set(srcs Lexer.cpp Token.cpp)
-add_library(cc-lib ${srcs})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+add_library(hcc-lib ${srcs})
 
 
