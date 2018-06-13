@@ -37,5 +37,9 @@ Lexer::Lex() {
 		g_tokens.push_back( new Identifier(buffer) );
 		return true;
 	}
+
+	else if (currentChar == '(') {
+
+	}
 	return false;
 }

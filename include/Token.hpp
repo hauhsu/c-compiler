@@ -29,7 +29,7 @@ class Keyword: public TokenBase
 {
 public:
 	Keyword (std::string str) { m_val = str; }
-	std::string str() { return m_val; }
+	std::string str() { return std::string("Keyword: ") + m_val; }
 	
 
 private:
@@ -40,7 +40,9 @@ class Integer: public TokenBase
 {
 public:
 	Integer (int num) { m_val = num; }
-	std::string str() { return std::to_string(m_val); }
+	Integer (std::string num) { m_val = std::stoi(num); }
+	std::string str() { return std::string("Integer: ") 
+		+ std::to_string(m_val); }
 	
 
 private:
@@ -51,7 +53,7 @@ class Identifier: public TokenBase
 {
 public:
 	Identifier (std::string iden) { m_val = iden; }
-	std::string str() { return m_val; }
+	std::string str() { return std::string("Identifier: ") + m_val; }
 	
 
 private:
@@ -59,7 +61,7 @@ private:
 
 };
 
-extern std::array<std::string, 2> g_reservedKeywords;
+extern std::array<std::string, 3> g_reservedKeywords;
 
 
 #endif /* end of include guard: TOKEN_HPP_IDA0LYU5 */

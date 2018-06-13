@@ -11,8 +11,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	auto lexer = Lexer(&inputFile);
-	while (lexer.Lex()){
-	}
+	while (lexer.Lex());
 	for (auto i : g_tokens) {
 		std::cout << i->str() << std::endl;	
 	}
