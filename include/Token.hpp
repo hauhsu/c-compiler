@@ -5,63 +5,59 @@
 #include <vector>
 #include <array>
 
-enum TokenType {
-	t_Keyword,
-	t_Identifier,
-	t_Constant,
-	t_StringLiteral,
-	t_Punctuator,
+enum Tag {
+	// Start from 256 because we might return read char directly
+	token_identifier = 256,
+	token_integer,
+	token_string,
+	token_and, token_or,
+	token_eq, token_ne, token_le, token_ge,
+	token_minus,
+	token_true, token_false,
+	token_eof,
 };
 
 
-class TokenBase {
+class Token {
 public:
-	TokenType getType() { return m_type; }
+	Token(int tag) { this->tag = tag; }
 	virtual std::string str() = 0;
 
 private:
-	TokenType m_type;	
+	 int tag;	
 };
 
-extern std::vector<TokenBase*> g_tokens;
-
-class Keyword: public TokenBase
+class Integer: public Token
 {
 public:
-	Keyword (std::string str) { m_val = str; }
-	std::string str() { return std::string("Keyword: ") + m_val; }
-	
+	Integer (int num): Token(token_integer) {
+		m_val = num;
+	}
+	Integer (int tag, std::string num): Token(tag) {
+		m_val = std::stoi(num);
+	}
 
-private:
-	std::string m_val;	
-};
-
-class Integer: public TokenBase
-{
-public:
-	Integer (int num) { m_val = num; }
-	Integer (std::string num) { m_val = std::stoi(num); }
-	std::string str() { return std::string("Integer: ") 
-		+ std::to_string(m_val); }
+	std::string str() {
+		return std::to_string(m_val);
+	}
 	
 
 private:
 	int m_val;	
 };
 
-class Identifier: public TokenBase
+class Word: public Token
 {
 public:
-	Identifier (std::string iden) { m_val = iden; }
-	std::string str() { return std::string("Identifier: ") + m_val; }
+	Word (std::string iden, int tag): Token(tag) {
+		m_val = iden;
+	}
+	std::string str() { return m_val; }
 	
-
 private:
 	std::string m_val;	
-
 };
 
-extern std::array<std::string, 3> g_reservedKeywords;
 
 
 #endif /* end of include guard: TOKEN_HPP_IDA0LYU5 */

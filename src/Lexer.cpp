@@ -2,44 +2,58 @@
 #include "Token.hpp"
 #include "Lexer.hpp"
 
-void
-Lexer::setInputStream(std::istream* is) {
-	inputStream = is;
-}
 
-char
-Lexer::getNext() {
-	return inputStream->get();
+
+void
+Lexer::readchar() {
+	peek = inputStream->get();
 }
 
 bool
-Lexer::Lex() {
-	std::string buffer;
-  auto currentChar = getNext();
-	if ( isalpha(currentChar) ) {
-		do {
-			buffer.push_back(currentChar);
-			currentChar = getNext();
-		}
-		while  (not isspace(currentChar)
-				 && not ispunct(currentChar)
-				 && not iscntrl(currentChar));
-
-		/* Check whether the words in buffer is keyword*/
-		for (auto keyword : g_reservedKeywords) {
-			if (buffer == keyword) {
-				g_tokens.push_back( new Keyword(buffer) );
-				return true;
-			}
-		}
-
-		/* If we reach here, it is an identifier. */
-		g_tokens.push_back( new Identifier(buffer) );
+Lexer::readchar(char expected) {
+	readchar();
+	if (peek == expected) {
+		peek = ' ';
 		return true;
+	} else {
+		return false;
+	}
+}
+
+void Lexer::addWord(std::string s, Word w) {
+	words.insert(std::pair<std::string, Word>(s, w));
+}
+
+
+Word
+Lexer::scan() {
+	std::string buffer;
+	do {
+		if (peek == ' ' || peek == '\t') continue;
+		else if (peek == '\n') line++;
+		else break;
+	} while (1);
+
+	switch(peek) {
+		case '&':
+			if (readchar('&')) return;
+
+	}
+	if (isalpha(peek)) {
+		do {
+			buffer.push_back(peek);
+			readchar();
+		} while (isalnum(peek));
+
+		/* Check whether the read word already in words*/
+		auto it = words.find(buffer);
+		if (it == words.end()) {
+			auto w = Word(buffer, token_identifier);
+			words.insert( std::pair<std::string, Word>(buffer, w) );
+			return w;
+		} else {
+			return it->second;
+		}
 	}
 
-	else if (currentChar == '(') {
-
-	}
-	return false;
 }
