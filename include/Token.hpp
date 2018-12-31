@@ -14,6 +14,16 @@ enum Tag {
 	token_eq, token_ne, token_le, token_ge,
 	token_minus,
 	token_true, token_false,
+	token_temp,
+
+  token_if,
+  token_else,
+  token_while,
+  token_do,
+  token_break,
+
+  token_basic,
+
 	token_eof,
 };
 
@@ -21,43 +31,70 @@ enum Tag {
 class Token {
 public:
 	Token(int tag) { this->tag = tag; }
-	virtual std::string str() = 0;
+	virtual std::string str() {
+    auto c = static_cast<char>(tag);
+    std::string s(1, c);
+    return s;
+  } 
 
 private:
 	 int tag;	
 };
 
+
 class Integer: public Token
 {
 public:
 	Integer (int num): Token(token_integer) {
-		m_val = num;
+		val = num;
 	}
 	Integer (int tag, std::string num): Token(tag) {
-		m_val = std::stoi(num);
+		val = std::stoi(num);
 	}
 
-	std::string str() {
-		return std::to_string(m_val);
+	auto str() -> std::string {
+		return std::to_string(val);
 	}
 	
 
 private:
-	int m_val;	
+	int val;	
 };
 
 class Word: public Token
 {
 public:
 	Word (std::string iden, int tag): Token(tag) {
-		m_val = iden;
+		lexeme = iden;
 	}
-	std::string str() { return m_val; }
+	auto str() -> std::string { return lexeme; }
+  auto get_lexeme() -> std::string { return lexeme; }
+
+  static Word // special symbols
+    AND, OR,
+    EQ, NE, LE, GE,
+    MINUS,
+    TRUE, FALSE,
+    TEMP; 
 	
 private:
-	std::string m_val;	
+	std::string lexeme;	
 };
 
+
+class Type: public Word
+{
+
+public:
+  Type(std::string s, int tag, int width): Word(s, tag), width(width) {}
+  auto get_width() -> int { return width; }
+
+public:
+  static Type INT, CHAR, BOOL, FLOAT;
+
+private:
+  int width;
+};
 
 
 #endif /* end of include guard: TOKEN_HPP_IDA0LYU5 */
