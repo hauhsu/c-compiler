@@ -33,6 +33,8 @@ public:
 
 	auto scan() -> Token*;
 
+  auto get_line() -> int { return line; }
+
   auto add_word (std::string s, Word *w) -> void {
     words.insert(std::pair<std::string, Word*>(s, w));
   }

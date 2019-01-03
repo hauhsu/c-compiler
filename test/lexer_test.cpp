@@ -16,16 +16,31 @@ protected:
 TEST_F (LexerTest, readchar) { 
   std::ifstream tfile("test.c");
   lexer.set_input_stream(tfile);
-  auto token = lexer.scan();
-  ASSERT_EQ(token, &Type::INT) << "Read " << token->str() << "\n";
+  Token *token = lexer.scan();
+  ASSERT_EQ(token, &Type::INT);
 
   Word *w = dynamic_cast<Word*>(lexer.scan());
-  ASSERT_EQ(w->get_lexeme(), "main") << "Read " << w->str() << "\n";
+  ASSERT_EQ(w->get_lexeme(), "main");
 
   Token *t2 = lexer.scan();
-  //ASSERT_EQ(t2->str(), "(") << "Read " << t2->str() << "\n";
+  ASSERT_EQ(t2->str(), "(");
 
   Token *t3 = lexer.scan();
-  ASSERT_EQ(t3->str(), ")") << "Read " << t3->str() << "\n";
+  ASSERT_EQ(t3->str(), ")");
+
+  Token *t4 = lexer.scan();
+  ASSERT_EQ(t4->str(), "{");
+
+  Word *w2 = dynamic_cast<Word*>(lexer.scan());
+  ASSERT_EQ(w2->str(), "return");
+
+  Integer* i1 = dynamic_cast<Integer*>(lexer.scan());
+  ASSERT_EQ(i1->str(), "0");
+
+  Token *t5 = lexer.scan();
+  ASSERT_EQ(t5->str(), ";");
+
+  Token *t6 = lexer.scan();
+  ASSERT_EQ(t6->str(), "}");
 }
  

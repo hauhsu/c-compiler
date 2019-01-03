@@ -48,7 +48,8 @@ public:
 	Integer (int num): Token(token_integer) {
 		val = num;
 	}
-	Integer (int tag, std::string num): Token(tag) {
+
+	Integer (std::string num): Token(token_integer) {
 		val = std::stoi(num);
 	}
 
@@ -56,7 +57,6 @@ public:
 		return std::to_string(val);
 	}
 	
-
 private:
 	int val;	
 };
